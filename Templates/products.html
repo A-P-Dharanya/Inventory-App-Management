@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Products</h1>
+
+<div class="flex space-x-4 mb-6">
+    <a href="{{ url_for('add_product') }}" class="bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Add New Product
+    </a>
+</div>
+
+{% if products %}
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+            </svg>
+            Product List
+        </h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-teal-600 text-white">
+                        <th class="py-3 px-4 text-left">Product ID</th>
+                        <th class="py-3 px-4 text-left">Name</th>
+                        <th class="py-3 px-4 text-left">Type</th>
+                        <th class="py-3 px-4 text-left">Description</th>
+                        <th class="py-3 px-4 text-left">Condition</th>
+                        <th class="py-3 px-4 text-left">Price ($)</th>
+                        <th class="py-3 px-4 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr class="{% if loop.index0 % 2 == 0 %}bg-gray-50{% else %}bg-white{% endif %} hover:bg-gray-100">
+                            <td class="py-3 px-4">{{ product.product_id }}</td>
+                            <td class="py-3 px-4">{{ product.name }}</td>
+                            <td class="py-3 px-4">{{ product.type or 'N/A' }}</td>
+                            <td class="py-3 px-4">{{ product.description or 'N/A' }}</td>
+                            <td class="py-3 px-4">{{ product.condition or 'N/A' }}</td>
+                            <td class="py-3 px-4">{{ product.price }}</td>
+                            <td class="py-3 px-4 flex space-x-2">
+                                <a href="{{ url_for('edit_product', id=product.product_id) }}" class="text-teal-600 hover:text-teal-800 flex items-center">
+                                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H8m2-6l4-4"></path>
+                                    </svg>
+                                    Edit
+                                </a>
+                                <a href="{{ url_for('delete_product', id=product.product_id) }}" onclick="return confirm('Are you sure you want to delete this product?')" class="text-red-600 hover:text-red-800 flex items-center">
+                                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4a2 2 0 012 2v1H8V5a2 2 0 012-2z"></path>
+                                    </svg>
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Stock by Location
+        </h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-teal-600 text-white">
+                        <th class="py-3 px-4 text-left">Product</th>
+                        {% for location in locations %}
+                            <th class="py-3 px-4 text-left">{{ location.city }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr class="{% if loop.index0 % 2 == 0 %}bg-gray-50{% else %}bg-white{% endif %} hover:bg-gray-100">
+                            <td class="py-3 px-4">{{ product.name }}</td>
+                            {% for location in locations %}
+                                <td class="py-3 px-4">
+                                    <span class="{% if stock_data[product.product_id][location.location_id] <= 10 %}text-red-600 font-semibold{% elif stock_data[product.product_id][location.location_id] <= 50 %}text-yellow-600{% else %}text-green-600{% endif %}">
+                                        {{ stock_data[product.product_id][location.location_id] }}
+                                    </span>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <p class="text-gray-600 italic">No products found.</p>
+{% endif %}
+{% endblock %}

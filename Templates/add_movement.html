@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add  Product Movement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-green-600 text-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold">Grocery Inventory</h1>
+            <div class="space-x-4">
+                <a href="{{ url_for('home') }}" class="hover:underline">Dashboard</a>
+                <a href="{{ url_for('view_products') }}" class="hover:underline">Products</a>
+                <a href="{{ url_for('view_locations') }}" class="hover:underline">Locations</a>
+                <a href="{{ url_for('view_movements') }}" class="hover:underline">Movements</a>
+                <a href="{{ url_for('product_movement_report') }}" class="hover:underline">Report</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Add Grocery Product Movement</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flex items-center p-4 mb-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            {% if category == 'success' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            {% else %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            {% endif %}
+                        </svg>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="bg-white p-6 rounded-lg shadow max-w-lg">
+            <form method="POST" action="{{ url_for('add_movement') }}" class="space-y-4">
+                <div>
+                    <label for="movement_id" class="block text-sm font-medium text-gray-700">Movement ID <span class="text-red-500">*</span></label>
+                    <input type="text" id="movement_id" name="movement_id" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="product_id" class="block text-sm font-medium text-gray-700">Product <span class="text-red-500">*</span></label>
+                    <select id="product_id" name="product_id" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <option value="">Select Product</option>
+                        {% for product in products %}
+                            <option value="{{ product.product_id }}">{{ product.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="from_location" class="block text-sm font-medium text-gray-700">From Location</label>
+                    <select id="from_location" name="from_location" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <option value="">None</option>
+                        {% for location in locations %}
+                            <option value="{{ location.location_id }}">{{ location.city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="to_location" class="block text-sm font-medium text-gray-700">To Location</label>
+                    <select id="to_location" name="to_location" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <option value="">None</option>
+                        {% for location in locations %}
+                            <option value="{{ location.location_id }}">{{ location.city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="qty" class="block text-sm font-medium text-gray-700">Quantity <span class="text-red-500">*</span></label>
+                    <input type="number" id="qty" name="qty" min="1" max="10000" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="flex space-x-3">
+                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Add Movement</button>
+                    <a href="{{ url_for('view_movements') }}" class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

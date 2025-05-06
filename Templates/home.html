@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+
+<div class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+        </svg>
+        Stock Overview
+    </h2>
+    {% if products and locations %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-teal-600 text-white">
+                        <th class="py-3 px-4 text-left">Product</th>
+                        {% for location in locations %}
+                            <th class="py-3 px-4 text-left">{{ location.city }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr class="{% if loop.index0 % 2 == 0 %}bg-gray-50{% else %}bg-white{% endif %} hover:bg-gray-100">
+                            <td class="py-3 px-4">{{ product.name }}</td>
+                            {% for location in locations %}
+                                <td class="py-3 px-4">
+                                    <span class="{% if stock_data[product.product_id][location.location_id] <= 10 %}text-red-600 font-semibold{% elif stock_data[product.product_id][location.location_id] <= 50 %}text-yellow-600{% else %}text-green-600{% endif %}">
+                                        {{ stock_data[product.product_id][location.location_id] }}
+                                    </span>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-gray-600 italic">No stock data available.</p>
+    {% endif %}
+</div>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+        </svg>
+        Recent Movements (Last 5)
+    </h2>
+    {% if movements %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-teal-600 text-white">
+                        <th class="py-3 px-4 text-left">Movement ID</th>
+                        <th class="py-3 px-4 text-left">Product ID</th>
+                        <th class="py-3 px-4 text-left">From Location</th>
+                        <th class="py-3 px-4 text-left">To Location</th>
+                        <th class="py-3 px-4 text-left">Quantity</th>
+                        <th class="py-3 px-4 text-left">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movement in movements %}
+                        <tr class="{% if loop.index0 % 2 == 0 %}bg-gray-50{% else %}bg-white{% endif %} hover:bg-gray-100">
+                            <td class="py-3 px-4">{{ movement.movement_id }}</td>
+                            <td class="py-3 px-4">{{ movement.product_id }}</td>
+                            <td class="py-3 px-4">{{ movement.from_location or 'None' }}</td>
+                            <td class="py-3 px-4">{{ movement.to_location or 'None' }}</td>
+                            <td class="py-3 px-4">{{ movement.qty }}</td>
+                            <td class="py-3 px-4">{{ movement.timestamp }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-gray-600 italic">No recent movements.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Add Product</h1>
+
+<div class="bg-white p-6 rounded-lg shadow-md max-w-lg">
+    <form method="POST" action="{{ url_for('add_product') }}" class="space-y-4">
+        <div class="flex items-center space-x-3">
+            <label for="product_id" class="w-32 text-sm font-medium text-gray-700">Product ID</label>
+            <div class="flex-1">
+                <input type="text" id="product_id" name="product_id" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <span class="text-red-500 text-xs">* Required</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <label for="name" class="w-32 text-sm font-medium text-gray-700">Name</label>
+            <div class="flex-1">
+                <input type="text" id="name" name="name" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <span class="text-red-500 text-xs">* Required</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <label for="type" class="w-32 text-sm font-medium text-gray-700">Type</label>
+            <input type="text" id="type" name="type" class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+        <div class="flex items-center space-x-3">
+            <label for="description" class="w-32 text-sm font-medium text-gray-700">Description</label>
+            <input type="text" id="description" name="description" class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+        <div class="flex items-center space-x-3">
+            <label for="condition" class="w-32 text-sm font-medium text-gray-700">Condition</label>
+            <input type="text" id="condition" name="condition" class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+        <div class="flex items-center space-x-3">
+            <label for="price" class="w-32 text-sm font-medium text-gray-700">Price ($)</label>
+            <div class="flex-1">
+                <input type="number" id="price" name="price" step="0.01" min="0.01" max="1000" required class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <span class="text-red-500 text-xs">* Required</span>
+            </div>
+        </div>
+        <div class="flex space-x-3">
+            <button type="submit" class="bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Add Product
+            </button>
+            <a href="{{ url_for('view_products') }}" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
